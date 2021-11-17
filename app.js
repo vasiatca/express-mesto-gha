@@ -2,8 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+const { port = 3000 } = process.env;
 const app = express();
-const port = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,7 +20,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '6106c11cca1a1a788449d783',
+    _id: '6190fbc6b6a2d84c6c066e88',
   };
 
   next();
@@ -28,6 +28,9 @@ app.use((req, res, next) => {
 
 app.use('/users', usersRoutes);
 app.use('/cards', cardsRoutes);
+app.use(function (req, res, next) {
+  res.status(404).send('Sorry cant find that!');
+});
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
