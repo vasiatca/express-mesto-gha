@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { createError, NOT_FOUND } = require('./const');
 
 const { port = 3000 } = process.env;
 const app = express();
@@ -20,7 +21,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '6190fbc6b6a2d84c6c066e88',
+    _id: '619f9c5ea2f2e2728cb0b370',
   };
 
   next();
@@ -28,9 +29,8 @@ app.use((req, res, next) => {
 
 app.use('/users', usersRoutes);
 app.use('/cards', cardsRoutes);
-app.use(function (req, res, next) {
-  res.status(404).send('Sorry cant find that!');
-});
+
+app.use((req, res) => createError(res, NOT_FOUND, 'Адрес не существует'));
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
