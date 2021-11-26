@@ -28,13 +28,10 @@ module.exports.deleteCardById = (req, res) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'Error') {
-        // 404 — Передан несуществующий _id карточки.
         createError(res, NOT_FOUND, err.message);
       } else if (err.name === 'CastError') {
-        // 400 — Неверно указан _id карточки.
         createError(res, ERROR_CODE, 'Неверно указан id карточки');
       } else {
-        // 500 — Ошибка по умолчанию.
         createError(res);
       }
     });
@@ -49,13 +46,10 @@ module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
   .then((card) => res.send({ data: card }))
   .catch((err) => {
     if (err.name === 'Error') {
-      // 404 — Передан несуществующий _id карточки.
       createError(res, NOT_FOUND, err.message);
     } else if (err.name === 'CastError') {
-      // 400 — Неверно указан _id карточки.
       createError(res, ERROR_CODE, 'Неверно указан id карточки');
     } else if (err.name === 'ValidationError') {
-      // 400 — Переданы некорректные данные для постановки/снятии лайка
       createError(res, ERROR_CODE, 'Переданы некорректные данные для постановки/снятии лайка');
     } else {
       createError(res);

@@ -28,13 +28,10 @@ module.exports.findUserById = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'Error') {
-        // 404 — Пользователь по указанному _id не найден.
         createError(res, NOT_FOUND, err.message);
       } else if (err.name === 'CastError') {
-        // 400 — Неверно указан _id пользователя.
         createError(res, ERROR_CODE, 'Неверно указан id пользователя');
       } else {
-        // 500 — Ошибка по умолчанию.
         createError(res);
       }
     });
@@ -48,13 +45,10 @@ module.exports.editUser = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'Error') {
-        // 404 — Пользователь по указанному _id не найден.
         createError(res, NOT_FOUND, err.message);
       } else if (err.name === 'CastError') {
-        // 400 — Неверно указан _id пользователя.
         createError(res, ERROR_CODE, 'Неверно указан id пользователя');
       } else if (err.name === 'ValidationError') {
-        // 400 — Переданы некорректные данные при обновлении пользователя.
         createError(res, ERROR_CODE, 'Ошибка при обновлении пользователя');
       } else {
         createError(res);
@@ -70,13 +64,10 @@ module.exports.editUserAvatar = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'Error') {
-        // 404 — Пользователь по указанному _id не найден.
         createError(res, NOT_FOUND, err.message);
       } else if (err.name === 'CastError') {
-        // 400 — Неверно указан _id пользователя.
         createError(res, ERROR_CODE, 'Неверно указан id пользователя');
       } else if (err.name === 'ValidationError') {
-        // 400 — Переданы некорректные данные при обновлении аватара.
         createError(res, ERROR_CODE, 'Ошибка при обновлении аватара');
       } else {
         createError(res);
