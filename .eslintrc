@@ -8,6 +8,7 @@
           "_id"
         ]
       }
-    ]
+    ],
+    "func-names": "off"
   }
 }
