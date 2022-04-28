@@ -64,43 +64,35 @@ module.exports.login = (req, res, next) => {
 
 module.exports.findUserById = (req, res, next) => {
   User.findById(req.params.userId)
-    .orFail(new Error('Пользователь не найден'))
+    .orFail(() => new NotFoundError('Пользователь с указанным id не существует'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'Error') {
-        next(new NotFoundError(err.message));
-      }
       if (err.name === 'CastError') {
         next(new CastError('Неверно указан id пользователя'));
       } else {
-        next();
+        next(err);
       }
     });
 };
 
 module.exports.findMyUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(new Error('Пользователь не найден'))
+    .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => res.send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'Error') {
-        next(new NotFoundError(err.message));
-      }
-      next();
-    });
+    .catch((err) => next(err));
 };
 
 module.exports.editUser = (req, res, next) => {
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
-    .orFail(() => next(new NotFoundError('Пользователь не найден')))
+    .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('Ошибка при обновлении пользователя'));
       }
-      next();
+      next(err);
     });
 };
 
@@ -108,12 +100,12 @@ module.exports.editUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
-    .orFail(() => next(new NotFoundError('Пользователь не найден')))
+    .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('Ошибка при обновлении аватара'));
       }
-      next();
+      next(err);
     });
 };

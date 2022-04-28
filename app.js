@@ -60,7 +60,7 @@ app.post('/signin', celebrate({
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().email().required(),
-    password: Joi.string().required().min(4).max(35),
+    password: Joi.string().required(),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().custom(checkURL),
@@ -70,7 +70,7 @@ app.post('/signup', celebrate({
 app.use('/users', auth, usersRoutes);
 app.use('/cards', auth, cardsRoutes);
 
-app.use('*', (req, res, next) => next(new NotFoundError('Адрес не существует')));
+app.use('*', auth, (req, res, next) => next(new NotFoundError('Адрес не существует')));
 
 app.use(errors());
 app.use(errorsHandler);
